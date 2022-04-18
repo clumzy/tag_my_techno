@@ -144,3 +144,8 @@ DATA/
 #CSV
 *.csv
 
+datasets/.~lock.genres.ods#
+datasets/audio_files/.spotdl-cache
+datasets/audio_files/acid_techno/.spotdl-cache
+datasets/audio_files/hard_techno/.spotdl-cache
+datasets/audio_files/hard_techno/The Fourth Branch.spotdlTrackingFile
