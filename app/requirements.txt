@@ -1,0 +1,11 @@
+keras==2.8.0
+librosa==0.9.1
+matplotlib==3.5.1
+numpy==1.21.5
+pandas==1.4.1
+pydub==0.25.1
+scikit_image==0.19.2
+seaborn==0.11.2
+skimage==0.0
+streamlit==1.5.1
+tensorflow==2.8.0
