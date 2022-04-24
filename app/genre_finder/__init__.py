@@ -64,7 +64,7 @@ def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample
     if MAX_OFFSET-offset <= 0:
         print(f"WARNING, OFFSET {offset} is TOO BIG")
     OFFSET = offset
-    song = pydub.AudioSegment.from_file(file).set_channels(1)
+    song = pydub.AudioSegment.from_file_using_temporary_files(file).set_channels(1)
     #ON REMET LE SAMPLE RATE A 44100 SI CE N'EST PAS LE CAS
     if song.frame_rate != SAMPLING_RATE: song = song.set_frame_rate(sample_rate)
     SAMPLE_LENGTH = sample_length*1000
@@ -188,12 +188,12 @@ def get_genre_prediction(model, sound_loc):
 
     Args:
         model (keras.models.Sequential): Le modèle utilisé
-        sound_loc (str): L'emplacement du fichier son
+        sound_loc (numpy.array): L'image représentant le fichier son.
 
     Returns:
         list(tuple): La liste des prédictions par ordre décroissant.
     """ 
-    y_pred = model.predict(np.array([song_to_img(sound_loc)])).reshape((21))
+    y_pred = model.predict(np.array([sound_loc])).reshape((21))
     sorted_preds = list(sorted(zip(y_pred,genres), key = lambda x: x[0], reverse = True))
     return sorted_preds
 
