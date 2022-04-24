@@ -148,3 +148,6 @@ DATA/
 *.~lock.genres.ods#
 *.spotdl-cache
 *.spotdlTrackingFile
+
+#MODEL
+*.hdf5
