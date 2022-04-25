@@ -154,3 +154,6 @@ DATA/
 
 #IMAGES & MUSIC
 images/*
+
+#VSCODE
+.vscode/
