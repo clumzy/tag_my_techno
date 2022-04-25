@@ -141,8 +141,8 @@ DATA/
 #KERAS
 *.v2
 
-#CSV
-*.csv
+#ODS
+*.ods
 
 #PROJECT SPECIFIC
 *.~lock.genres.ods#
