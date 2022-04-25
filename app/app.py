@@ -55,7 +55,5 @@ if uploaded_file is not None:
         plt.tight_layout(pad = 1000)
         st.pyplot(fig)
         st.text("Genre inference done !")
-        inference_done = True
-    if inference_done:
         st.header("Part 4: Inference evaluation")
         st.text("Did the model guess the genre properly ?")

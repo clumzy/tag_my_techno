@@ -66,7 +66,7 @@ def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample
     if song.frame_rate != SAMPLING_RATE: song = song.set_frame_rate(sample_rate)
     SAMPLE_LENGTH = sample_length*1000
     # LA CHANSON EST DECOUPEE EN NUM_SAMPLES MORCEAUX, DE LONGEUR SAMPLE_LENGTH(SECONDES)
-    song_inter = np.linspace(SAMPLE_LENGTH*OFFSET,(len(song)-(SAMPLE_LENGTH*(MAX_OFFSET-OFFSET)+15000)),NUM_SAMPLE).astype(int)
+    song_inter = np.linspace(SAMPLE_LENGTH*OFFSET,(len(song)-(SAMPLE_LENGTH*(MAX_OFFSET-OFFSET)+10*1000)),NUM_SAMPLE).astype(int)
     y = np.hstack([song[song_inter[i]:song_inter[i]+SAMPLE_LENGTH].get_array_of_samples() for i in range(0,NUM_SAMPLE)])
     # ON RENVOIE UNE VERSION NORMALISEE DE L'AMPLITUDE
     if normalized:
