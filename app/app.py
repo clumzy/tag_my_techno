@@ -6,6 +6,7 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from time import sleep
 
 inference_done = False
 model = genre_finder.load_model("mdl_wts.hdf5")
@@ -25,19 +26,28 @@ if uploaded_file is not None:
     r = np.dstack((one_pad,one_pad-song_img[:,:,0],one_pad-song_img[:,:,0])).astype(np.uint8)
     g = np.dstack((one_pad-song_img[:,:,1],one_pad,one_pad-song_img[:,:,1])).astype(np.uint8)
     b = np.dstack((one_pad-song_img[:,:,2],one_pad-song_img[:,:,2],one_pad)).astype(np.uint8)
+    progress_bar = st.progress(0)
+    sleep(1)
+    progress_bar.progress(25)
     st.markdown(body = "### Feature 1: Constant-Q aka *intensity*")
     st.image(r, output_format = "PNG")
+    sleep(1)
+    progress_bar.progress(50)
     st.markdown(body = "### Feature 2: MFCC aka *perceived frequencies*")
     st.image(g, output_format = "PNG")
+    sleep(1)
+    progress_bar.progress(75)
     st.markdown(body = "### Feature 3: Chromagram (CENS Variant) aka *melody*")
     st.image(b, output_format = "PNG")
+    sleep(1)
+    progress_bar.progress(100)
     st.markdown(body = "### Which all adds up to this picture :")
     st.image(song_img, output_format = "PNG")
     if st.button("Start inference :"):
         st.header("Part 3: Genre inference")
         results = [g for g in genre_finder.get_genre_prediction(model, song_img) if g[0] > 0.8]
         fig = plt.figure(figsize = (10,4))
-        sns.set_style(style='dark')
+        sns.set_style(style='whitegrid')
         genre_plot = sns.barplot(x = [x[1] for x in results], y = [x[0] for x in results], palette="rocket")
         genre_plot.bar_label(genre_plot.containers[0], fmt='%.3f')
         plt.title(uploaded_file.name+": detected genres.")

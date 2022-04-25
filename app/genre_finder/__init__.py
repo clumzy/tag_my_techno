@@ -37,7 +37,7 @@ def rgb_transform(data):
     """
     return (((data+abs(data.min()))/(data+abs(data.min())).max())*255).astype(np.uint8)
 
-def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample_rate=44100, offset = 0, max_offset = 2):
+def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample_rate=44100, offset = 0, max_offset = 0):
     """Une fonction qui renvoie un array Numpy représentant un fichier audio découpé selon
     les paramètres indiqués dans la fonction. On anticipe aussi le fait de récupérer plusieurs fois
     le même son, avec la capacité de procéder à un offset. Les différents extraits sont équitablement répartis
