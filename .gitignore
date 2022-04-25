@@ -151,3 +151,7 @@ DATA/
 
 #MODEL
 *.hdf5
+
+#IMAGES & MUSIC
+images/*
+datasets/*
