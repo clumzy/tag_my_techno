@@ -4,6 +4,7 @@ import pandas as pd
 
 import os
 import librosa
+import pydub
 import librosa.display
 from skimage.transform import resize
 import warnings
@@ -14,12 +15,8 @@ warnings.filterwarnings('ignore')
 
 import tensorflow as tf
 from keras.models import Sequential
-from keras.layers import MaxPooling2D, Conv2D, Flatten, Dense, Dropout, BatchNormalization, LSTM
-from keras.callbacks import EarlyStopping, TensorBoard, ModelCheckpoint, ReduceLROnPlateau
+from keras.layers import MaxPooling2D, Conv2D, Flatten, Dense, BatchNormalization
 
-import pydub
-
-checkpoint = 'mdl_wts.hdf5'
 
 genres = ['acid_house', 'acid_techno', 'acid_trance', 'breakbeat_house',
        'breakbeat_techno', 'deep_house', 'detroit_house',
