@@ -1,6 +1,4 @@
 import numpy as np
-import os
-import pandas as pd
 
 import os
 import librosa
@@ -8,7 +6,7 @@ import pydub
 import librosa.display
 from skimage.transform import resize
 import warnings
-
+import streamlit as st
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -66,7 +64,7 @@ def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample
     if song.frame_rate != SAMPLING_RATE: song = song.set_frame_rate(sample_rate)
     SAMPLE_LENGTH = sample_length*1000
     # LA CHANSON EST DECOUPEE EN NUM_SAMPLES MORCEAUX, DE LONGEUR SAMPLE_LENGTH(SECONDES)
-    song_inter = np.linspace(SAMPLE_LENGTH*OFFSET,(len(song)-(SAMPLE_LENGTH*(MAX_OFFSET-OFFSET)+10*1000)),NUM_SAMPLE).astype(int)
+    song_inter = np.linspace(SAMPLE_LENGTH*(MAX_OFFSET-OFFSET-1)+(1*1000),len(song)-(SAMPLE_LENGTH*(MAX_OFFSET-OFFSET)+(10*1000)),NUM_SAMPLE).astype(int)
     y = np.hstack([song[song_inter[i]:song_inter[i]+SAMPLE_LENGTH].get_array_of_samples() for i in range(0,NUM_SAMPLE)])
     # ON RENVOIE UNE VERSION NORMALISEE DE L'AMPLITUDE
     if normalized:
@@ -136,6 +134,7 @@ def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_ra
     rgb = np.dstack((r,g,b)).astype(np.uint8)
     return rgb
 
+@st.cache
 def lenet5():
     """Le modèle qui nous permet d'inférer le genre d'un fichier audio.
 
@@ -179,21 +178,22 @@ def lenet5():
     
     return model
 
-def get_genre_prediction(model, sound_loc):
+def get_genre_prediction(model, sound):
     """Une fonction qui nous permet de renvoyer les prédictions du genre d'un fichier audio,
     triés par ordre décroissant.
 
     Args:
         model (keras.models.Sequential): Le modèle utilisé
-        sound_loc (numpy.array): L'image représentant le fichier son.
+        sound (numpy.array): L'image représentant le fichier son.
 
     Returns:
         list(tuple): La liste des prédictions par ordre décroissant.
     """ 
-    y_pred = model.predict(np.array([sound_loc])).reshape((21))
+    y_pred = model.predict(np.array([sound])).reshape((21))
     sorted_preds = list(sorted(zip(y_pred,genres), key = lambda x: x[0], reverse = True))
     return sorted_preds
 
+@st.cache(allow_output_mutation=True)
 def load_model(checkpoint_path):
     """La fonction qui nous permet de charger le modèle à partir du meilleur checkpoint calculé
     plus tôt.
