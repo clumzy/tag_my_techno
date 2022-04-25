@@ -156,4 +156,4 @@ DATA/
 images/*
 
 #VSCODE
-.vscode/
+.vscode/*
