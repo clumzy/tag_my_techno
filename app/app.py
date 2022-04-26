@@ -44,7 +44,6 @@ if uploaded_file is not None:
     st.markdown(body = "### Which all adds up to this picture :")
     st.image(song_img, output_format = "PNG")
     if st.button("Start inference :"):
-        inference_done = True
         st.header("Part 3: Genre inference")
         results = [g for g in genre_finder.get_genre_prediction(model, song_img) if g[0] > 0.8]
         fig = plt.figure(figsize = (10,4))
@@ -56,6 +55,7 @@ if uploaded_file is not None:
         plt.tight_layout()
         st.pyplot(fig)
         st.text("Genre inference done !")
+        inference_done = True
     if inference_done:
         st.header("Part 4: Inference evaluation")
         st.text("Did the model guess the genre properly ?")
