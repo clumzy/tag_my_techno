@@ -11,9 +11,7 @@ import streamlit as st
 import warnings
 warnings.filterwarnings('ignore')
 
-import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import MaxPooling2D, Conv2D, Flatten, Dense, BatchNormalization
+from keras.models import load_model
 
 
 genres = ['acid_house', 'acid_techno', 'acid_trance', 'breakbeat_house',
@@ -134,50 +132,6 @@ def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_ra
     rgb = np.dstack((r,g,b)).astype(np.uint8)
     return rgb
 
-@st.cache
-def lenet5():
-    """Le modèle qui nous permet d'inférer le genre d'un fichier audio.
-
-    Returns:
-        keras.models.Sequential: Le modèle.
-    """
-    model = Sequential()
-    model.add(BatchNormalization(input_shape=(84, 1292, 3), momentum=0.99))
-    # CONV POOL 0
-    model.add(Conv2D(filters=16, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    # CONV POOL 1
-    model.add(Conv2D(filters=32, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    # CONV POOL 2
-    model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    # CONV POOL 3
-    model.add(Conv2D(filters=128, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    # DROPOUT AVANT LE FLATTEN
-    model.add(Flatten())
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=512, activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=512, activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=256, activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=256, activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=128, activation='relu'))
-    model.add(BatchNormalization(momentum=0.99))
-    model.add(Dense(units=128, activation='relu'))
-    # OUTPUT LAYER
-    model.add(Dense(units=21, activation = 'sigmoid'))
-    
-    return model
-
 def get_genre_prediction(model, sound):
     """Une fonction qui nous permet de renvoyer les prédictions du genre d'un fichier audio,
     triés par ordre décroissant.
@@ -194,18 +148,15 @@ def get_genre_prediction(model, sound):
     return sorted_preds
 
 @st.cache(allow_output_mutation=True)
-def load_model(checkpoint_path):
-    """La fonction qui nous permet de charger le modèle à partir du meilleur checkpoint calculé
+def create_model(model_path):
+    """La fonction qui nous permet de recréer le modèle à partir du meilleur checkpoint calculé
     plus tôt.
 
     Args:
-        checkpoint_path (str): Le chemin du checkpoint à utiliser.
+        model_path (str): Le chemin du checkpoint à utiliser.
 
     Returns:
         keras.models.Sequential: Le modèle avec les poids renseignés.
     """
-    my_model = lenet5()
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
-    my_model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['categorical_accuracy'])
-    my_model.load_weights(checkpoint_path)
+    my_model = load_model(model_path)
     return my_model

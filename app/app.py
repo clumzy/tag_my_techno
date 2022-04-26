@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from time import sleep
 
-inference_done = False
-model = genre_finder.load_model("mdl_wts.hdf5")
+model = genre_finder.create_model("mdl.keras")
 
 st.title("Electronic music genre detector using a custom CNN Deep Neural Network")
 
@@ -27,19 +26,19 @@ if uploaded_file is not None:
     g = np.dstack((one_pad-song_img[:,:,1],one_pad,one_pad-song_img[:,:,1])).astype(np.uint8)
     b = np.dstack((one_pad-song_img[:,:,2],one_pad-song_img[:,:,2],one_pad)).astype(np.uint8)
     progress_bar = st.progress(0)
-    if not inference_done: sleep(1)
+    sleep(0.5)
     progress_bar.progress(25)
     st.markdown(body = "### Feature 1: Constant-Q aka *intensity*")
     st.image(r, output_format = "PNG")
-    if not inference_done: sleep(1)
+    sleep(0.5)
     progress_bar.progress(50)
     st.markdown(body = "### Feature 2: MFCC aka *perceived frequencies*")
     st.image(g, output_format = "PNG")
-    if not inference_done: sleep(1)
+    sleep(0.5)
     progress_bar.progress(75)
     st.markdown(body = "### Feature 3: Chromagram (CENS Variant) aka *melody*")
     st.image(b, output_format = "PNG")
-    if not inference_done: sleep(1)
+    sleep(0.5)
     progress_bar.progress(100)
     st.markdown(body = "### Which all adds up to this picture :")
     st.image(song_img, output_format = "PNG")
@@ -55,7 +54,5 @@ if uploaded_file is not None:
         plt.tight_layout()
         st.pyplot(fig)
         st.text("Genre inference done !")
-        inference_done = True
-    if inference_done:
         st.header("Part 4: Inference evaluation")
         st.text("Did the model guess the genre properly ?")
