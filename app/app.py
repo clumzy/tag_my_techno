@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from time import sleep
 
-model = genre_finder.create_model("mdl.keras")
 
 st.title("Electronic music genre detector using a custom CNN Deep Neural Network")
+with st.spinner('Loading model...'):
+    model = genre_finder.create_model("mdl.keras")
 
 st.header("Part 1: File upload")
 uploaded_file = st.file_uploader(
@@ -21,10 +22,7 @@ if uploaded_file is not None:
     st.success("File upload succesful.")
     st.header("Part 2: Image from audio file")
     song_img = genre_finder.song_to_img(uploaded_file)
-    one_pad = np.ones(song_img[:,:,0].shape)*255
-    r = np.dstack((one_pad,one_pad-song_img[:,:,0],one_pad-song_img[:,:,0])).astype(np.uint8)
-    g = np.dstack((one_pad-song_img[:,:,1],one_pad,one_pad-song_img[:,:,1])).astype(np.uint8)
-    b = np.dstack((one_pad-song_img[:,:,2],one_pad-song_img[:,:,2],one_pad)).astype(np.uint8)
+    r,g,b = genre_finder.split_rgb(song_img)
     progress_bar = st.progress(0)
     sleep(0.5)
     progress_bar.progress(25)
@@ -44,17 +42,25 @@ if uploaded_file is not None:
     st.image(song_img, output_format = "PNG")
     if st.button("Start inference :"):
         st.header("Part 3: Genre inference")
-        results = [g for g in genre_finder.get_genre_prediction(model, song_img) if g[0] > 0.8]
-        fig = plt.figure(figsize = (10,4))
-        sns.set_style(style='whitegrid')
-        genre_plot = sns.barplot(x = [x[1] for x in results], y = [x[0] for x in results], palette="rocket")
-        genre_plot.bar_label(genre_plot.containers[0], fmt='%.3f')
-        plt.title(uploaded_file.name+": detected genres.")
-        plt.xticks(rotation=0)
-        plt.tight_layout()
-        st.pyplot(fig)
-        st.text("Genre inference done !")
+        with st.spinner('Loading predictions...'):
+            results = [g for g in genre_finder.get_genre_prediction(model, song_img) if g[0] > 0.8]
+            fig = plt.figure(figsize = (10,4))
+            sns.set_style(style='whitegrid')
+            genre_plot = sns.barplot(x = [x[1] for x in results], y = [x[0] for x in results], palette="rocket")
+            genre_plot.bar_label(genre_plot.containers[0], fmt='%.3f')
+            plt.title(uploaded_file.name+": the following genres have been detected !")
+            plt.xticks(rotation=0)
+            plt.tight_layout()
+            st.pyplot(fig)
         st.header("Part 4: Inference evaluation")
         st.text("Did the model guess the genre properly ?")
-        st.checkbox("Yes it did !")
-        st.button("Send feedback.")
+        st.text("Did the model guess the genre properly ?")
+        with st.form("send_feedback"):
+            options = st.multiselect(
+                'Please select all the current genres that apply to this audio file so that we can keep on improving the model 😊',
+                genre_finder.genres,
+                [x[1] for x in results])
+
+            submitted = st.form_submit_button("Send feedback")
+            if submitted:
+                st.write("Thank you for sending your feedback !")

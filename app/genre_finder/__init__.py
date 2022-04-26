@@ -13,13 +13,12 @@ warnings.filterwarnings('ignore')
 
 from keras.models import load_model
 
-
-genres = ['acid_house', 'acid_techno', 'acid_trance', 'breakbeat_house',
-       'breakbeat_techno', 'deep_house', 'detroit_house',
-       'detroit_techno', 'ghetto_house', 'hard_techno', 'hard_trance',
-       'industrial_techno', 'lofi_house', 'melodic_techno',
-       'minimal_deep_tech', 'minimal_techno', 'progressive_house',
-       'progressive_trance', 'psytrance', 'soulful_house', 'tech_house']
+genres = ['Acid House', 'Acid Techno', 'Acid Trance', 'Breakbeat House',
+       'Breakbeat Techno', 'Deep House', 'Detroit House',
+       'Detroit Techno', 'Ghetto House', 'Hard Techno', 'Hard Trance',
+       'Industrial Techno', 'Lofi House', 'Melodic Techno',
+       'Minimal Deep Tech', 'Minimal Techno', 'Progressive House',
+       'Progressive Trance', 'Psytrance', 'Soulful House', 'Tech House']
 
 def rgb_transform(data):
     """Une fonction qui prend en entrée une image au format Array en RGB, et qui va normaliser
@@ -131,6 +130,21 @@ def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_ra
     
     rgb = np.dstack((r,g,b)).astype(np.uint8)
     return rgb
+
+def split_rgb(song_img):
+    """Une fonction qui sépare une image au format numpy Array en 3 images r,g et b.
+
+    Args:
+        song_img (numpy.array): Une image au format numpy Array.
+
+    Returns:
+        tuple(numpy.array): Trois images R,G et B au format numpy Array.
+    """
+    one_pad = np.ones(song_img[:,:,0].shape)*255
+    r = np.dstack((one_pad,one_pad-song_img[:,:,0],one_pad-song_img[:,:,0])).astype(np.uint8)
+    g = np.dstack((one_pad-song_img[:,:,1],one_pad,one_pad-song_img[:,:,1])).astype(np.uint8)
+    b = np.dstack((one_pad-song_img[:,:,2],one_pad-song_img[:,:,2],one_pad)).astype(np.uint8)
+    return r,g,b
 
 def get_genre_prediction(model, sound):
     """Une fonction qui nous permet de renvoyer les prédictions du genre d'un fichier audio,
