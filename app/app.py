@@ -56,3 +56,5 @@ if uploaded_file is not None:
         st.text("Genre inference done !")
         st.header("Part 4: Inference evaluation")
         st.text("Did the model guess the genre properly ?")
+        st.checkbox("Yes it did !")
+        st.button("Send feedback.")
