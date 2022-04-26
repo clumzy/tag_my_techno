@@ -161,7 +161,7 @@ def get_genre_prediction(model, sound):
     sorted_preds = list(sorted(zip(y_pred,genres), key = lambda x: x[0], reverse = True))
     return sorted_preds
 
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True, show_spinner=False)
 def create_model(model_path):
     """La fonction qui nous permet de recréer le modèle à partir du meilleur checkpoint calculé
     plus tôt.
