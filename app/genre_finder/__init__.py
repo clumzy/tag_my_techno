@@ -32,6 +32,7 @@ def rgb_transform(data):
     """
     return (((data+abs(data.min()))/(data+abs(data.min())).max())*255).astype(np.uint8)
 
+
 def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample_rate=44100, offset = 0, max_offset = 0):
     """Une fonction qui renvoie un array Numpy représentant un fichier audio découpé selon
     les paramètres indiqués dans la fonction. On anticipe aussi le fait de récupérer plusieurs fois
@@ -69,6 +70,7 @@ def get_from_pydub(file, normalized=True, num_sample=10, sample_length=3, sample
     else:
         return song.frame_rate, y
 
+@st.cache
 def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_rate=44100, offset = 0, max_offset=0):
     """Une fonction qui transforme un fichier audio en image.
     L'image renvoyée est composée du 
@@ -131,6 +133,7 @@ def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_ra
     rgb = np.dstack((r,g,b)).astype(np.uint8)
     return rgb
 
+@st.cache
 def split_rgb(song_img):
     """Une fonction qui sépare une image au format numpy Array en 3 images r,g et b.
 
@@ -146,6 +149,7 @@ def split_rgb(song_img):
     b = np.dstack((one_pad-song_img[:,:,2],one_pad-song_img[:,:,2],one_pad)).astype(np.uint8)
     return r,g,b
 
+@st.cache
 def get_genre_prediction(model, sound):
     """Une fonction qui nous permet de renvoyer les prédictions du genre d'un fichier audio,
     triés par ordre décroissant.
