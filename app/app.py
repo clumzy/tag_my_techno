@@ -4,6 +4,8 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+#VERSION 303
+
 st.set_page_config(page_title="🎵 Tag My Techno 🎵") #type: ignore
 st.title("🎵 Tag My Techno 🎵")
 st.header("An electronic music genres detector using a custom CNN Deep Neural Network")
