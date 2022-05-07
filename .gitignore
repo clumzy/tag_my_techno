@@ -134,6 +134,7 @@ DATA/
 *.wav
 *.flac
 *.aiff
+*.m3u
 
 #PICKLE
 *.pkl
