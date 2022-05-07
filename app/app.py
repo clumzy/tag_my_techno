@@ -4,7 +4,7 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-#VERSION 303
+#VERSION 101
 
 st.set_page_config(page_title="🎵 Tag My Techno 🎵") #type: ignore
 st.title("🎵 Tag My Techno 🎵")
