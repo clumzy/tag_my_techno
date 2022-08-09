@@ -41,7 +41,7 @@ def playlist_from_list(m3u_location, audio_list):
 @click.option('--model_loc', default="mdl.keras", help='The location of the model.', show_default=True)
 @click.option('--audio_loc', help='The location of the audio files to guess.', show_default=True)
 @click.option('--playlist_loc', help='The location where you want the playlists to be stored.', show_default=True)
-@click.option('--threshold', default=0.95, help="The threshold above which you wish the genre to be recognized.", show_default=True)
+@click.option('--threshold', default=0.95, help="The threshold above which a genre is recognized.",show_default=True)
 def sorter(model_loc, audio_loc, playlist_loc, threshold):
     model = tmt.create_model(model_loc)
     files = get_files_list(audio_loc)
