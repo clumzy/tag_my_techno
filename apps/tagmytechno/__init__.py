@@ -1,6 +1,4 @@
-from keras.models import load_model
 import numpy as np
-
 import os
 import librosa
 import pydub
@@ -188,6 +186,7 @@ def get_genre_prediction(model, sound_image, minimum=0.85):
 
 @ st.cache(allow_output_mutation=True, show_spinner=False)
 def create_model(model_path):
+    from keras.models import load_model
     """La fonction qui nous permet de recréer le modèle à partir du meilleur checkpoint calculé
     plus tôt.
 
