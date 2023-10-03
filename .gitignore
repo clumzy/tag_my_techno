@@ -159,3 +159,5 @@ images/*
 
 #VSCODE
 .vscode/*
+*.xml
+*.iml

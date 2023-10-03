@@ -6,8 +6,8 @@ import librosa.display
 from skimage.transform import resize
 import warnings
 import streamlit as st
-
 import warnings
+
 warnings.filterwarnings('ignore')
 
 
@@ -133,13 +133,13 @@ def song_to_img(file, hop_length=1024, num_sample=10, sample_length=3, sample_ra
                    mfcc_song.shape[1], chromacens.shape[1])
     IM_SHAPE = (IM_HEIGHT, IM_WIDTH)
 
-    r = rgb_transform(resize(constant_q, (IM_SHAPE),
+    r = rgb_transform(resize(constant_q, IM_SHAPE,
                       anti_aliasing=None, mode="reflect", order=0)).astype(np.uint)
 
-    g = rgb_transform(resize(mfcc_song, (IM_SHAPE),
+    g = rgb_transform(resize(mfcc_song, IM_SHAPE,
                       anti_aliasing=None, mode="reflect", order=0)).astype(np.uint)
 
-    b = rgb_transform(resize(chromacens, (IM_SHAPE),
+    b = rgb_transform(resize(chromacens, IM_SHAPE,
                       anti_aliasing=None, mode="reflect", order=0)).astype(np.uint)
 
     rgb = np.dstack((r, g, b)).astype(np.uint8)
@@ -171,14 +171,14 @@ def get_genre_prediction(model, sound_image, minimum=0.85):
 
     Args:
         model (keras.models.Sequential): Le modèle utilisé
-        sound (numpy.array): L'image représentant le fichier son.
+        sound_image (numpy.array): L'image représentant le fichier son.
         minimum (float): Le threshold minimal à atteindre pour que le genre soit considéré 
             comme valide.
 
     Returns:
         list(tuple): La liste des prédictions par ordre décroissant.
     """
-    y_pred = model.predict(np.array([sound_image])).reshape((21))
+    y_pred = model.predict(np.array([sound_image])).reshape(21)
     sorted_preds = [p for p in list(sorted(
         zip(y_pred, genres), key=lambda x: x[0], reverse=True)) if p[0] >= minimum]
     return sorted_preds

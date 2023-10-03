@@ -8,12 +8,14 @@ from pathlib import Path
 from tqdm import tqdm
 import click
 
+
 def get_files_list(location = "/home/george/Code/clumzy/tag_my_techno/datasets/audio/"):
     audio_files = np.empty((0,1))
     # LES EXTENSIONS QUE L'ON CHERCHE
     exts = ['*.flac','*.mp3', "*.wav", "*.aiff"]
     audio_files = [path for ext in exts for path in Path(location).rglob(f'{ext}')]
     return audio_files
+
 
 def predict_and_sort_audio(model, files_list, threshold = 0.85):
     sorted_list = {}
@@ -27,6 +29,7 @@ def predict_and_sort_audio(model, files_list, threshold = 0.85):
             else: sorted_list[g[1]] = [tune]
     return sorted_list
 
+
 def playlist_from_list(m3u_location, audio_list):
     m3u = Path(m3u_location)
     m3u.touch(exist_ok=True)
@@ -36,7 +39,6 @@ def playlist_from_list(m3u_location, audio_list):
     f.close()
 
 
-
 @click.command()
 @click.option('--model_loc', default="mdl.keras", help='The location of the model.', show_default=True)
 @click.option('--audio_loc', help='The location of the audio files to guess.', show_default=True)
@@ -44,12 +46,12 @@ def playlist_from_list(m3u_location, audio_list):
 @click.option('--threshold', default=0.95, help="The threshold above which a genre is recognized.",show_default=True)
 def sorter(model_loc, audio_loc, playlist_loc, threshold):
     model = tmt.create_model(model_loc)
-    files = get_files_list(audio_loc)
-    print(f"Now analyzing {len(files)} files :")
-    lst = predict_and_sort_audio(model, files, threshold)
+    audio_files = get_files_list(audio_loc)
+    print(f"Now analyzing {len(audio_files)} files :")
+    lst = predict_and_sort_audio(model, audio_files, threshold)
     print(f"Now creating {len(lst)} playlists.")
     for playlist in lst:
-        playlist_from_list(os.path.join(playlist_loc,f"{playlist.lower().replace(' ', '_')}.m3u"), lst[playlist])
+        playlist_from_list(os.path.join(playlist_loc, f"{playlist.lower().replace(' ', '_')}.m3u"), lst[playlist])
     pass
 
 
