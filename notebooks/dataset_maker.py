@@ -8,6 +8,7 @@ from os import mkdir
 from os.path import exists
 
 num_cores = cpu_count()
+num_cores = int(num_cores/2)
 legal_chars = ascii_letters + digits + whitespace
 
 
@@ -39,8 +40,14 @@ def download_playlists(
         print(f"Loading {p.title} :")
         process_map(_download_video, videos, max_workers=num_cores, total=len_pl)
 
+def main():
+    parser = argparse.ArgumentParser(description='Download playlists from a CSV file.')
+    parser.add_argument('csv_loc', type=str, help='The location of the CSV file.')
+    parser.add_argument('save_path', type=str, help='The path where the playlists will be saved.')
+    args = parser.parse_args()
+
+    download_playlists(args.csv_loc, args.save_path)
+
 
 if __name__ == '__main__':
-    a = "D:/George/Documents/Code/clumzy/tag_my_techno/datasets/genres.csv"
-    b = "D:/George/Documents/Code/clumzy/tag_my_techno/datasets"
-    download_playlists(a, b)
+    main()

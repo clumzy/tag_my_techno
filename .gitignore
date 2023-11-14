@@ -161,3 +161,4 @@ images/*
 .vscode/*
 *.xml
 *.iml
+.DS_Store
