@@ -9,7 +9,7 @@ from os import mkdir
 from os.path import exists
 
 num_cores = cpu_count()
-num_cores = int(num_cores/2)
+num_workers = int(num_cores/2)
 legal_chars = ascii_letters + digits + whitespace
 
 
@@ -54,7 +54,7 @@ def download_playlists(csv_loc: str, save_path: str):
         len_pl = len(list(p.videos))
         videos = zip(list(p.videos), [save_path+"/"+pl[1]["Genre"]+"/"]*len_pl)
         print(f"Loading {p.title} :")
-        process_map(_download_video, videos, max_workers=num_cores, total=len_pl)
+        process_map(_download_video, videos, max_workers=num_workers, total=len_pl)
 
 
 def main():
