@@ -12,12 +12,14 @@ num_cores = cpu_count()
 num_cores = int(num_cores/2)
 legal_chars = ascii_letters + digits + whitespace
 
+
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Download playlists from a CSV file.')
     parser.add_argument('csv_loc', type=str, help='The location of the CSV file.')
     parser.add_argument('save_path', type=str, help='The path where the playlists will be saved.')
     return parser.parse_args()
+
 
 def _download_video(package):
     """
@@ -39,6 +41,7 @@ def _download_video(package):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
 def download_playlists(csv_loc: str, save_path: str):
     """Download all playlists from a CSV file."""
     plists = pd.read_csv(filepath_or_buffer=csv_loc, sep=",")
@@ -53,10 +56,12 @@ def download_playlists(csv_loc: str, save_path: str):
         print(f"Loading {p.title} :")
         process_map(_download_video, videos, max_workers=num_cores, total=len_pl)
 
+
 def main():
     """Main function."""
     args = parse_args()
     download_playlists(args.csv_loc, args.save_path)
+
 
 if __name__ == '__main__':
     main()
