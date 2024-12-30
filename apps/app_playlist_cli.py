@@ -1,5 +1,3 @@
-from email.policy import default
-from importlib.resources import files
 import tagmytechno as tmt
 import numpy as np
 import os

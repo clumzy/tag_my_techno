@@ -12,11 +12,11 @@ warnings.filterwarnings('ignore')
 
 
 genres = ['Acid House', 'Acid Techno', 'Acid Trance', 'Breakbeat House',
-          'Breakbeat Techno', 'Deep House', 'Detroit House',
-          'Detroit Techno', 'Ghetto House', 'Hard Techno', 'Hard Trance',
-          'Industrial Techno', 'Lofi House', 'Melodic Techno',
-          'Minimal Deep Tech', 'Minimal Techno', 'Progressive House',
-          'Progressive Trance', 'Psytrance', 'Soulful House', 'Tech House']
+        'Breakbeat Techno', 'Deep House', 'Detroit House',
+        'Detroit Techno', 'Ghetto House', 'Hard Techno', 'Hard Trance',
+        'Industrial Techno', 'Lofi House', 'Melodic Techno',
+        'Minimal Deep Tech', 'Minimal Techno', 'Progressive House',
+        'Progressive Trance', 'Psytrance', 'Soulful House', 'Tech House']
 
 
 def rgb_transform(data):
@@ -183,8 +183,6 @@ def get_genre_prediction(model, sound_image, minimum=0.85):
         zip(y_pred, genres), key=lambda x: x[0], reverse=True)) if p[0] >= minimum]
     return sorted_preds
 
-
-@ st.cache(allow_output_mutation=True, show_spinner=False)
 def create_model(model_path):
     from keras.models import load_model
     """La fonction qui nous permet de recréer le modèle à partir du meilleur checkpoint calculé
