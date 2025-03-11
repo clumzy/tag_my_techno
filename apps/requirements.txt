@@ -1,5 +1,5 @@
 click==8.1.7
-keras==2.13.1
+keras==3.9.0
 librosa==0.10.1
 matplotlib==3.7.2
 numpy==1.23.5
